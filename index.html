@@ -54,6 +54,7 @@
     <div class="d-flex align-items-center mb-2">
       <label for="ayat" class="form-label mb-0 flex-shrink-0" style="width:50px;">Ayat</label>
       <input id="ayat" type="number" min="1" value="1" class="form-control" style="max-width:100px;"/>
+      <span id="maxAyat" class="ms-2"> dari 7</span>
     </div>
 
 
@@ -125,12 +126,12 @@
         qariData = data;       // assign data dari JSON ke qariData
         console.log(qariData); // boleh guna macam const asal
         // Contoh: isi select Qari
-        const qariSelect = document.getElementById('qari');
+        // const qariSelect = document.getElementById('qari');
         Object.entries(qariData).forEach(([id, q]) => {
           const opt = document.createElement('option');
           opt.value = q.subfolder;
           opt.textContent = q.name;
-          // if (id === "46") opt.selected = true;
+          if (id === "2") opt.selected = true;
           qariSelect.appendChild(opt);
         });
       })
@@ -144,11 +145,13 @@
     fetch('surahData.json')
       .then(res => res.json())
       .then(surahList => {
-        // surahList adalah array
-        surahList.forEach(surahName => {
+        // const surahSelect = document.getElementById('surah');
+
+        Object.entries(surahList).forEach(([id, q]) => {
           const opt = document.createElement('option');
-          opt.textContent = surahName;
-          opt.value = surahName; // optional, kalau nak value sama
+          opt.value = id;
+          opt.textContent = `${id} - ${q.name}`;
+          opt.dataset.ayat = q.ayat;
           surahSelect.appendChild(opt);
         });
       })
@@ -160,6 +163,7 @@
     const qariSelect = document.getElementById('qari');
     const surahSelect = document.getElementById('surah');
     const ayatInput = document.getElementById('ayat');
+    const maxAyat = document.getElementById('maxAyat');
     const loadBtn = document.getElementById('loadBtn');
     const pauseBtn = document.getElementById('pauseBtn');
     const stopBtn = document.getElementById('stopBtn');
@@ -172,6 +176,8 @@
     const current = document.getElementById('current');
     const ayatImg = document.getElementById('ayatImg');
     const imgStatus = document.getElementById('imgStatus');
+
+    
 
     let baseUrl = '';
     let audio = new Audio();
@@ -205,15 +211,28 @@
       baseUrl = `https://everyayah.com/data/${qariFolder}/`;
     }
 
+    function updateMaxAyat() {
+      const selectedOpt = surahSelect.selectedOptions[0];
+      maxAyat.textContent = ` dari ${selectedOpt.dataset.ayat}`;
+      ayatInput.max = parseInt(selectedOpt.dataset.ayat);
+    }
+
     async function playAyat() {
       updateBaseUrl();
-      const surahNum = parseInt(surahSelect.value.split(' - ')[0]);
+      const surahNum = parseInt(surahSelect.value);
       const ayatNum = parseInt(ayatInput.value) || 1;
       const surahStr = pad(surahNum, 3);
       const ayatStr = pad(ayatNum, 3);
       const file = `${surahStr}${ayatStr}.mp3`;
       const url = baseUrl + file;
       current.textContent = `${surahSelect.value} : Ayat ${ayatNum}`;
+
+      const selectedOpt = surahSelect.selectedOptions[0];
+      if (ayatNum > parseInt(selectedOpt.dataset.ayat)) {
+        status.textContent = 'Ayat tidak dijumpai';
+        return;
+      }
+
       status.textContent = 'Memuat audio...';
       updateImage(surahNum, ayatNum);
       try {
@@ -253,7 +272,7 @@
     }
 
     qariSelect.onchange = () => stopBtn.onclick();
-    surahSelect.onchange = () => { ayatInput.value = 1; updateImage(parseInt(surahSelect.value.split(' - ')[0]), 1); };
+    surahSelect.onchange = () => { ayatInput.value = 1; updateMaxAyat(); updateImage(parseInt(surahSelect.value), 1); };
     loadBtn.onclick = playAyat;
     pauseBtn.onclick = () => { audio.pause(); status.textContent = 'Pause'; };
     stopBtn.onclick = () => { audio.pause(); audio.currentTime = 0; status.textContent = 'Berhenti'; };
