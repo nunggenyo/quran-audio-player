@@ -1,83 +1,18 @@
 <!doctype html>
 <html lang="ms">
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Pemain Audio Surah Quran - Pelbagai Qari</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
   <style>
     body {
-      font-family: system-ui, Arial, sans-serif;
-      margin: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      background-color: #eef6ff;
       min-height: 100vh;
-      background: #eef6ff
-    }
-
-    .card {
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-      padding: 20px;
-      width: min(95%, 600px)
-    }
-
-    h1 {
-      font-size: 20px;
-      margin-bottom: 10px
-    }
-
-    select,
-    input,
-    button {
-      padding: 8px 10px;
-      font-size: 15px;
-      border-radius: 8px;
-      border: 1px solid #ccc
-    }
-
-    .row {
       display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 10px
-    }
-
-    button {
-      background: #0ea5e9;
-      color: #fff;
-      border: 0;
-      cursor: pointer
-    }
-
-    button.secondary {
-      background: #64748b
-    }
-
-    button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed
-    }
-
-    .small {
-      font-size: 13px;
-      color: #475569;
-      margin-top: 8px
-    }
-
-    progress {
-      width: 100%;
-      height: 8px;
-      border-radius: 4px;
-      overflow: hidden
-    }
-
-    #ayatImg {
-      max-width: 100%;
-      border-radius: 8px;
-      margin: 10px 0
+      align-items: center;
+      justify-content: center;
     }
 
     #credit {
@@ -86,7 +21,7 @@
       right: 15px;
       font-size: 13px;
       color: #64748b;
-      background: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.9);
       padding: 6px 10px;
       border-radius: 8px;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
@@ -94,126 +29,131 @@
       z-index: 100;
     }
 
+    #ayatImg {
+      max-width: 100%;
+      border-radius: 8px;
+    }
   </style>
 </head>
 
 <body>
-  <main class="card">
-    <h1>Pemain Audio Surah Quran</h1>
+  <main class="card shadow-lg p-4" style="width: min(95%, 600px);">
+    <h4 class="mb-3 text-center">🎧 Pemain Audio Surah Quran</h4>
 
-    <div class="row">
-      <label>Qari:
-        <select id="qari"></select>
-      </label>
+    <div class="d-flex mb-2 align-items-center">
+      <label class="form-label me-2 mb-0">Qari</label>
+      <select id="qari" class="form-select w-auto">
+      </select>
     </div>
 
-    <div class="row">
-      <label>Surah:
-        <select id="surah"></select>
-      </label>
-      <label>Ayat:
-        <input id="ayat" type="number" min="1" value="1" style="width:80px" />
-      </label>
+
+    <div class="d-flex mb-2 align-items-center gap-1">
+      <label class="form-label me-2 mb-0">Surah</label>
+      <select id="surah" class="form-select w-auto"></select>
+      <label class="form-label me-2 mb-0 ms-2">Ayat</label>
+      <input id="ayat" type="number" min="1" value="1" class="form-control" style="width: 100px;"/>
     </div>
 
-    <div class="row">
-      <button id="loadBtn">Play</button>
-      <button id="pauseBtn" class="secondary" disabled>Pause</button>
-      <button id="stopBtn" class="secondary" disabled>Stop</button>
-      <button id="nextBtn" class="secondary" disabled>Next</button>
-      <label><input id="loopChk" type="checkbox"> Repeat</label>
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+      <div class="btn-group">
+        <button id="loadBtn" class="btn btn-primary">▶ Play</button>
+        <!-- <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+          <span class="visually-hidden">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu">
+          <li><button id="playSurahBtn" class="dropdown-item">Play Surah</button></li>
+        </ul> -->
+      </div>
+      <button id="pauseBtn" class="btn btn-secondary" disabled>Pause</button>
+      <button id="stopBtn" class="btn btn-secondary" disabled>Stop</button>
+      <button id="nextBtn" class="btn btn-secondary" disabled>Next</button>
+      <div class="form-check ms-1">
+        <input class="form-check-input" type="checkbox" id="loopChk">
+        <label class="form-check-label" for="loopChk">Repeat</label>
+      </div>
     </div>
 
-    <div class="row">
-      <label>Vol </label>
-      <input id="vol" type="range" min="0" max="1" step="0.01" value="1">
-    </div>
-
-    <img id="ayatImg" src="" alt="Imej ayat akan dipaparkan di sini"
+    <!-- <div class="mb-3">
+      <label for="vol" class="form-label">Volum</label>
+      <input id="vol" type="range" min="0" max="1" step="0.01" value="1" class="form-range w-auto">
+    </div> -->
+    
+    <div style="overflow:auto; max-width:100%; max-height:500px; text-align:right;">
+      <img id="ayatImg" src="" style="width:auto; height:auto;"
       onerror="this.onerror=null;this.src='';document.getElementById('imgStatus').textContent='Imej tidak dijumpai';">
-    <div class="small" id="imgStatus"></div>
+    </div>
 
-    <progress id="progress" value="0" max="1"></progress>
-    <div class="small">Sedang main: <span id="current"></span></div>
-    <div class="small">Status: <span id="status">Sedia</span></div>
-    <div class="small">Waktu: <span id="time">00:00 / 00:00</span></div>
-    <div id="credit">Quran Audio Player by Hafizul Amri</div>
+    <div class="small text-muted" id="imgStatus"></div>
+
+    <div class="mt-3 mb-1">
+      <div class="progress" style="height: 8px;">
+        <div id="progressBar" class="progress-bar" role="progressbar" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <div class="small text-muted mt-2">
+      Sedang main: <span id="current"></span><br>
+      Status: <span id="status">Sedia</span><br>
+      Waktu: <span id="time">00:00 / 00:00</span>
+    </div>
+
+    <div id="credit">
+      <span>Quran Audio Player by Hafizul Amri</span><br/>
+      <span>Sumber audio dan imej dari everyayah.com</span>
+    </div>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
   <script>
-    const qariData = {
-    "1": { "subfolder": "Abdul_Basit_Mujawwad_128kbps", "name": "Abdul Basit Mujawwad" },
-    "2": { "subfolder": "Abdul_Basit_Murattal_192kbps", "name": "Abdul Basit Murattal" },
-    "3": { "subfolder": "warsh/warsh_Abdul_Basit_128kbps", "name": "Abdul Basit (Warsh)" },
-    "4": { "subfolder": "AbdulSamad_64kbps_QuranExplorer.Com", "name": "AbdulSamad" },
-    "5": { "subfolder": "Abdullaah_3awwaad_Al-Juhaynee_128kbps", "name": "Abdullaah 3awwaad Al-Juhaynee" },
-    "6": { "subfolder": "Abdullah_Basfar_192kbps", "name": "Abdullah Basfar" },
-    "7": { "subfolder": "Abdullah_Matroud_128kbps", "name": "Abdullah Matroud" },
-    "8": { "subfolder": "Abdurrahmaan_As-Sudais_192kbps", "name": "Abdurrahmaan As-Sudais" },
-    "9": { "subfolder": "Abu_Bakr_Ash-Shaatree_128kbps", "name": "Abu Bakr Ash-Shaatree" },
-    "11": { "subfolder": "ahmed_ibn_ali_al_ajamy_128kbps", "name": "Ahmed Ibn Ali Al Ajamy" },
-    "12": { "subfolder": "Ahmed_Neana_128kbps", "name": "Ahmed Neana" },
-    "13": { "subfolder": "Akram_AlAlaqimy_128kbps", "name": "Akram Al Alaqimy" },
-    "14": { "subfolder": "Alafasy_128kbps", "name": "Alafasy" },
-    "15": { "subfolder": "Ali_Hajjaj_AlSuesy_128kbps", "name": "Ali_Hajjaj_AlSuesy" },
-    "16": { "subfolder": "Ali_Jaber_64kbps", "name": "Ali Jaber" },
-    "17": { "subfolder": "Ayman_Sowaid_64kbps", "name": "Ayman Sowaid" },
-    "18": { "subfolder": "aziz_alili_128kbps", "name": "Aziz Alili" },
-    "19": { "subfolder": "Fares_Abbad_64kbps", "name": "Fares Abbad" },
-    "20": { "subfolder": "Ghamadi_40kbps", "name": "Ghamadi" },
-    "21": { "subfolder": "Hani_Rifai_192kbps", "name": "Hani Rifai" },
-    "22": { "subfolder": "Hudhaify_128kbps", "name": "Hudhaify" },
-    "23": { "subfolder": "Husary_128kbps", "name": "Husary" },
-    "24": { "subfolder": "Husary_128kbps_Mujawwad", "name": "Husary Mujawwad" },
-    "25": { "subfolder": "Husary_Muallim_128kbps", "name": "Husary (Muallim)" },
-    "26": { "subfolder": "Ibrahim_Al-Dosary_128kbps", "name": "Ibrahim Al-Dosary (Warsh)" },
-    "27": { "subfolder": "Karim_Mansoori_40kbps", "name": "Karim Mansoori (Iran)" },
-    "28": { "subfolder": "Khaalid_Abdullaah_al-Qahtaanee_192kbps", "name": "Khalid Abdullah al-Qahtanee" },
-    "29": { "subfolder": "khalefa_al_tunaiji_64kbps", "name": "Khalefa Al-Tunaiji" },
-    "30": { "subfolder": "MaherAlMuaiqly128kbps", "name": "Maher Al Muaiqly" },
-    "31": { "subfolder": "mahmoud_ali_al_banna_32kbps", "name": "Mahmoud Ali Al-Banna" },
-    "32": { "subfolder": "Minshawy_Mujawwad_192kbps", "name": "Minshawy Mujawwad" },
-    "33": { "subfolder": "Minshawy_Murattal_128kbps", "name": "Minshawy Murattal" },
-    "34": { "subfolder": "Mohammad_al_Tablaway_128kbps", "name": "Mohammad al Tablaway" },
-    "35": { "subfolder": "Muhammad_AbdulKareem_128kbps", "name": "Muhammad AbdulKareem" },
-    "36": { "subfolder": "Muhammad_Ayyoub_128kbps", "name": "Muhammad Ayyoub" },
-    "37": { "subfolder": "Muhammad_Jibreel_128kbps", "name": "Muhammad Jibreel" },
-    "38": { "subfolder": "Muhsin_Al_Qasim_192kbps", "name": "Muhsin Al Qasim" },
-    "39": { "subfolder": "Mustafa_Ismail_48kbps", "name": "Mustafa Ismail" },
-    "40": { "subfolder": "Nasser_Alqatami_128kbps", "name": "Nasser_Alqatami" },
-    "41": { "subfolder": "Parhizgar_48kbps", "name": "Parhizgar" },
-    "42": { "subfolder": "Salaah_AbdulRahman_Bukhatir_128kbps", "name": "Salaah AbdulRahman Bukhatir" },
-    "43": { "subfolder": "Salah_Al_Budair_128kbps", "name": "Salah Al Budair" },
-    "44": { "subfolder": "Saood_ash-Shuraym_128kbps", "name": "Saood bin Ibraaheem Ash-Shuraym" },
-    "45": { "subfolder": "Sahl_Yassin_128kbps", "name": "Sahl_Yassin" },
-    "46": { "subfolder": "Yaser_Salamah_128kbps", "name": "Yaser Salamah" },
-    "47": { "subfolder": "Yasser_Ad-Dussary_128kbps", "name": "Yasser_Ad-Dussary" },
-    "48": { "subfolder": "warsh/warsh_yassin_al_jazaery_64kbps", "name": "Yassin Al-Jazaery (Warsh)" }
-  };
+    // ======== Data Qari dan Surah (sama seperti versi asal) ========
+    // const qariData = {
+    //   "1": { "subfolder": "Abdul_Basit_Mujawwad_128kbps", "name": "Abdul Basit Mujawwad" },
+    //   "2": { "subfolder": "Abdul_Basit_Murattal_192kbps", "name": "Abdul Basit Murattal" },
+    //   "14": { "subfolder": "Alafasy_128kbps", "name": "Alafasy" },
+    //   "29": { "subfolder": "khalefa_al_tunaiji_64kbps", "name": "Khalefa Al-Tunaiji" },
+    //   "46": { "subfolder": "Yaser_Salamah_128kbps", "name": "Yaser Salamah" }
+    // };
+    let qariData = {};  // declare const/let kosong dulu
+
+    fetch('qariData.json')
+      .then(response => response.json())
+      .then(data => {
+        qariData = data;       // assign data dari JSON ke qariData
+        console.log(qariData); // boleh guna macam const asal
+        // Contoh: isi select Qari
+        const qariSelect = document.getElementById('qari');
+        Object.entries(qariData).forEach(([id, q]) => {
+          const opt = document.createElement('option');
+          opt.value = q.subfolder;
+          opt.textContent = q.name;
+          // if (id === "46") opt.selected = true;
+          qariSelect.appendChild(opt);
+        });
+      })
+      .catch(err => console.error('Gagal load qariData:', err));
+
+    // const surahList = [
+    //   "1 - Al-Fatihah", "2 - Al-Baqarah", "3 - Ali Imran", "4 - An-Nisa", "5 - Al-Maidah",
+    //   "36 - Ya-Sin", "55 - Ar-Rahman", "56 - Al-Waqiah", "67 - Al-Mulk", "112 - Al-Ikhlas"
+    // ];
+
+    fetch('surahData.json')
+      .then(res => res.json())
+      .then(surahList => {
+        // surahList adalah array
+        surahList.forEach(surahName => {
+          const opt = document.createElement('option');
+          opt.textContent = surahName;
+          opt.value = surahName; // optional, kalau nak value sama
+          surahSelect.appendChild(opt);
+        });
+      })
+      .catch(err => console.error("Gagal load surahList:", err));
+
 
 
     const imgBase = 'https://everyayah.com/data/images_png/';
-    // const imgBase = 'https://everyayah.com/data/quranpngs/';
-    const surahList = [
-      "1 - Al-Fatihah", "2 - Al-Baqarah", "3 - Ali Imran", "4 - An-Nisa", "5 - Al-Maidah", "6 - Al-An'am", "7 - Al-A'raf",
-      "8 - Al-Anfal", "9 - At-Tawbah", "10 - Yunus", "11 - Hud", "12 - Yusuf", "13 - Ar-Ra'd", "14 - Ibrahim", "15 - Al-Hijr",
-      "16 - An-Nahl", "17 - Al-Isra", "18 - Al-Kahf", "19 - Maryam", "20 - Taha", "21 - Al-Anbiya", "22 - Al-Hajj",
-      "23 - Al-Mu'minun", "24 - An-Nur", "25 - Al-Furqan", "26 - Ash-Shu'ara", "27 - An-Naml", "28 - Al-Qasas", "29 - Al-Ankabut",
-      "30 - Ar-Rum", "31 - Luqman", "32 - As-Sajdah", "33 - Al-Ahzab", "34 - Saba", "35 - Fatir", "36 - Ya-Sin", "37 - As-Saffat",
-      "38 - Sad", "39 - Az-Zumar", "40 - Ghafir", "41 - Fussilat", "42 - Ash-Shura", "43 - Az-Zukhruf", "44 - Ad-Dukhan",
-      "45 - Al-Jathiyah", "46 - Al-Ahqaf", "47 - Muhammad", "48 - Al-Fath", "49 - Al-Hujurat", "50 - Qaf", "51 - Adh-Dhariyat",
-      "52 - At-Tur", "53 - An-Najm", "54 - Al-Qamar", "55 - Ar-Rahman", "56 - Al-Waqiah", "57 - Al-Hadid", "58 - Al-Mujadilah",
-      "59 - Al-Hashr", "60 - Al-Mumtahanah", "61 - As-Saff", "62 - Al-Jumuah", "63 - Al-Munafiqun", "64 - At-Taghabun",
-      "65 - At-Talaq", "66 - At-Tahrim", "67 - Al-Mulk", "68 - Al-Qalam", "69 - Al-Haqqah", "70 - Al-Ma'arij", "71 - Nuh",
-      "72 - Al-Jinn", "73 - Al-Muzzammil", "74 - Al-Muddathir", "75 - Al-Qiyamah", "76 - Al-Insan", "77 - Al-Mursalat",
-      "78 - An-Naba", "79 - An-Nazi'at", "80 - Abasa", "81 - At-Takwir", "82 - Al-Infitar", "83 - Al-Mutaffifin",
-      "84 - Al-Inshiqaq", "85 - Al-Buruj", "86 - At-Tariq", "87 - Al-A'la", "88 - Al-Ghashiyah", "89 - Al-Fajr", "90 - Al-Balad",
-      "91 - Ash-Shams", "92 - Al-Lail", "93 - Ad-Duha", "94 - Ash-Sharh", "95 - At-Tin", "96 - Al-Alaq", "97 - Al-Qadr",
-      "98 - Al-Bayyinah", "99 - Az-Zalzalah", "100 - Al-Adiyat", "101 - Al-Qariah", "102 - At-Takathur", "103 - Al-Asr",
-      "104 - Al-Humazah", "105 - Al-Fil", "106 - Quraysh", "107 - Al-Ma'un", "108 - Al-Kawthar", "109 - Al-Kafirun",
-      "110 - An-Nasr", "111 - Al-Masad", "112 - Al-Ikhlas", "113 - Al-Falaq", "114 - An-Nas"
-    ];
-
     const qariSelect = document.getElementById('qari');
     const surahSelect = document.getElementById('surah');
     const ayatInput = document.getElementById('ayat');
@@ -222,8 +162,8 @@
     const stopBtn = document.getElementById('stopBtn');
     const nextBtn = document.getElementById('nextBtn');
     const loopChk = document.getElementById('loopChk');
-    const vol = document.getElementById('vol');
-    const progress = document.getElementById('progress');
+    // const vol = document.getElementById('vol');
+    const progressBar = document.getElementById('progressBar');
     const status = document.getElementById('status');
     const time = document.getElementById('time');
     const current = document.getElementById('current');
@@ -234,21 +174,21 @@
     let audio = new Audio();
     let cacheBlob = null;
 
-    // isi senarai qari
-    Object.entries(qariData).forEach(([id, q]) => {
-      const opt = document.createElement('option');
-      opt.value = q.subfolder;
-      opt.textContent = `${q.name}`;
-      if (id === "46") opt.selected = true;
-      qariSelect.appendChild(opt);
-    });
+    // // Isi senarai Qari
+    // Object.entries(qariData).forEach(([id, q]) => {
+    //   const opt = document.createElement('option');
+    //   opt.value = q.subfolder;
+    //   opt.textContent = q.name;
+    //   if (id === "46") opt.selected = true;
+    //   qariSelect.appendChild(opt);
+    // });
 
-    // isi senarai surah
-    surahList.forEach(name => {
-      const opt = document.createElement('option');
-      opt.textContent = name;
-      surahSelect.appendChild(opt);
-    });
+    // Isi senarai Surah
+    // surahList.forEach(name => {
+    //   const opt = document.createElement('option');
+    //   opt.textContent = name;
+    //   surahSelect.appendChild(opt);
+    // });
 
     function pad(num, len) { return num.toString().padStart(len, '0'); }
     function fmt(t) { if (!isFinite(t)) return '00:00'; const m = Math.floor(t / 60).toString().padStart(2, '0'); const s = Math.floor(t % 60).toString().padStart(2, '0'); return `${m}:${s}`; }
@@ -257,7 +197,6 @@
       ayatImg.src = imgUrl;
       imgStatus.textContent = '';
     }
-
     function updateBaseUrl() {
       const qariFolder = qariSelect.value;
       baseUrl = `https://everyayah.com/data/${qariFolder}/`;
@@ -281,46 +220,57 @@
         cacheBlob = URL.createObjectURL(blob);
         audio.src = cacheBlob;
         audio.loop = loopChk.checked;
-        audio.volume = parseFloat(vol.value);
+        // audio.volume = parseFloat(vol.value);
         await audio.play();
         status.textContent = 'Main';
         pauseBtn.disabled = false;
         stopBtn.disabled = false;
         nextBtn.disabled = false;
       } catch (e) {
-        if (e.message === "404") {
-          let nextSurah = surahSelect.selectedIndex + 1;
-          if (nextSurah < surahSelect.options.length) {
-            surahSelect.selectedIndex = nextSurah;
-            ayatInput.value = 1;
-            playAyat();
-          } else {
-            status.textContent = 'Tiada lagi surah seterusnya.';
-          }
-        } else {
-          console.error(e);
-          status.textContent = 'Gagal memuat audio';
-        }
+        status.textContent = 'Gagal memuat audio';
       }
     }
-    qariSelect.onchange = () => { stopBtn.onclick();  };
+
+    async function playFullSurah() {
+      const surahNum = parseInt(surahSelect.value.split(' - ')[0]);
+      let ayatNum = 1, teruskan = true;
+      while (teruskan) {
+        ayatInput.value = ayatNum;
+        await playAyat();
+        await new Promise(resolve => {
+          audio.onended = () => resolve();
+          audio.onerror = () => resolve();
+        });
+        ayatNum++;
+        const nextUrl = `${baseUrl}${pad(surahNum, 3)}${pad(ayatNum, 3)}.mp3`;
+        const res = await fetch(nextUrl);
+        if (!res.ok) teruskan = false;
+      }
+      status.textContent = 'Selesai main satu surah.';
+    }
+
+    qariSelect.onchange = () => stopBtn.onclick();
     surahSelect.onchange = () => { ayatInput.value = 1; updateImage(parseInt(surahSelect.value.split(' - ')[0]), 1); };
     loadBtn.onclick = playAyat;
     pauseBtn.onclick = () => { audio.pause(); status.textContent = 'Pause'; };
     stopBtn.onclick = () => { audio.pause(); audio.currentTime = 0; status.textContent = 'Berhenti'; };
-    nextBtn.onclick = () => { ayatInput.value = parseInt(ayatInput.value || 1) + 1; playAyat(); };
-    vol.oninput = () => audio.volume = parseFloat(vol.value);
+    nextBtn.onclick = () => { audio.pause(); ayatInput.value = parseInt(ayatInput.value || 1) + 1; playAyat(); };
+    // vol.oninput = () => audio.volume = parseFloat(vol.value);
     loopChk.onchange = () => audio.loop = loopChk.checked;
 
     audio.ontimeupdate = () => {
-      if (audio.duration) progress.value = audio.currentTime / audio.duration;
+      if (audio.duration) {
+        progressBar.style.width = (audio.currentTime / audio.duration * 100) + '%';
+      }
       time.textContent = `${fmt(audio.currentTime)} / ${fmt(audio.duration)}`;
     };
-    audio.onended = () => { if (!audio.loop) status.textContent = 'Tamat'; };
 
-    // set default base url
+    document.getElementById('playSurahBtn').onclick = async () => {
+      status.textContent = 'Main satu surah penuh...';
+      await playFullSurah();
+    };
+
     updateBaseUrl();
   </script>
 </body>
-
 </html>
