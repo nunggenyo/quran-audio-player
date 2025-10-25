@@ -40,22 +40,36 @@
   <main class="card shadow-lg p-4" style="width: min(95%, 600px);">
     <h4 class="mb-3 text-center">🎧 Pemain Audio Surah Quran</h4>
 
-    <div class="d-flex mb-2 align-items-center">
-      <label class="form-label me-2 mb-0" style="width: 50px;">Qari</label>
-      <select id="qari" class="form-select w-auto ms-1">
-      </select>
+    <div class="row mb-2 align-items-center">
+      <div class="col-auto">
+        <label for="qari" class="form-label mb-0" style="width:50px;">Qari</label>
+      </div>
+      <div class="col">
+        <select id="qari" class="form-select w-100 ms-1">
+          <option>Abdul Basit</option>
+          <option>Alafasy</option>
+        </select>
+      </div>
     </div>
 
-
-    <div class="d-flex mb-2 align-items-center gap-1">
-      <label class="form-label me-2 mb-0" style="width: 50px;">Surah</label>
-      <select id="surah" class="form-select w-auto"></select>
+    <div class="row mb-2 align-items-center">
+      <div class="col-auto">
+        <label for="surah" class="form-label mb-0" style="width:50px;">Surah</label>
+      </div>
+      <div class="col">
+        <select id="surah" class="form-select w-100 ms-1"></select>
+      </div>
     </div>
 
-    <div class="d-flex mb-2 align-items-center gap-1">
-      <label class="form-label me-2 mb-0" style="width: 50px;">Ayat</label>
-      <input id="ayat" type="number" min="1" value="1" class="form-control" style="width: 100px;"/>
+    <div class="row mb-2 align-items-center">
+      <div class="col-auto">
+        <label for="ayat" class="form-label mb-0" style="width:50px;">Ayat</label>
+      </div>
+      <div class="col">
+        <input id="ayat" type="number" min="1" value="1" class="form-control w-100 ms-1" style="max-width:100px;"/>
+      </div>
     </div>
+
 
     <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
       <div class="btn-group">
