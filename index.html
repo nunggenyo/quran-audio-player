@@ -79,6 +79,21 @@
       border-radius: 8px;
       margin: 10px 0
     }
+
+    #credit {
+      position: fixed;
+      bottom: 10px;
+      right: 15px;
+      font-size: 13px;
+      color: #64748b;
+      background: rgba(255, 255, 255, 0.85);
+      padding: 6px 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(5px);
+      z-index: 100;
+    }
+
   </style>
 </head>
 
@@ -122,6 +137,7 @@
     <div class="small">Sedang main: <span id="current"></span></div>
     <div class="small">Status: <span id="status">Sedia</span></div>
     <div class="small">Waktu: <span id="time">00:00 / 00:00</span></div>
+    <div id="credit">Quran Audio Player by Hafizul Amri</div>
   </main>
 
   <script>
@@ -289,7 +305,7 @@
     qariSelect.onchange = () => { stopBtn.onclick();  };
     surahSelect.onchange = () => { ayatInput.value = 1; updateImage(parseInt(surahSelect.value.split(' - ')[0]), 1); };
     loadBtn.onclick = playAyat;
-    pauseBtn.onclick = () => { audio.pause(); status.textContent = 'Jeda'; };
+    pauseBtn.onclick = () => { audio.pause(); status.textContent = 'Pause'; };
     stopBtn.onclick = () => { audio.pause(); audio.currentTime = 0; status.textContent = 'Berhenti'; };
     nextBtn.onclick = () => { ayatInput.value = parseInt(ayatInput.value || 1) + 1; playAyat(); };
     vol.oninput = () => audio.volume = parseFloat(vol.value);
